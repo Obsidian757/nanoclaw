@@ -170,6 +170,30 @@ export function setLastGroupSync(): void {
  * Store a message with full content.
  * Only call this for registered groups where message history is needed.
  */
+export interface SimpleMessage {
+  id: string;
+  chatJid: string;
+  sender: string;
+  senderName: string;
+  content: string;
+  timestamp: string;
+  isFromMe: number;
+}
+
+export function storeSimpleMessage(msg: SimpleMessage): void {
+  db.prepare(
+    `INSERT OR REPLACE INTO messages (id, chat_jid, sender, sender_name, content, timestamp, is_from_me) VALUES (?, ?, ?, ?, ?, ?, ?)`,
+  ).run(
+    msg.id,
+    msg.chatJid,
+    msg.sender,
+    msg.senderName,
+    msg.content,
+    msg.timestamp,
+    msg.isFromMe,
+  );
+}
+
 export function storeMessage(
   msg: proto.IWebMessageInfo,
   chatJid: string,

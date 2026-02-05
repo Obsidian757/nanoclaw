@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  damien:
+    build: .
+    container_name: damien
+    restart: unless-stopped
+    env_file: .env
+    volumes:
+      - ./data:/app/data
+      - ./groups:/app/groups
+      - ./store:/app/store
+    environment:
+      - NODE_ENV=production
+      - KIMI_API_KEY=${KIMI_API_KEY}
+      - KIMI_MODEL=${KIMI_MODEL:-kimi-k2-5}
+      - KIMI_BASE_URL=${KIMI_BASE_URL:-https://api.moonshot.cn/v1}
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"

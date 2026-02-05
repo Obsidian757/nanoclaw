@@ -1,5 +1,5 @@
 /**
- * NanoClaw Agent Runner
+ * Damien Agent Runner
  * Runs inside a container, receives config via stdin, outputs result to stdout
  */
 
@@ -45,8 +45,8 @@ async function readStdin(): Promise<string> {
   });
 }
 
-const OUTPUT_START_MARKER = '---NANOCLAW_OUTPUT_START---';
-const OUTPUT_END_MARKER = '---NANOCLAW_OUTPUT_END---';
+const OUTPUT_START_MARKER = '---DAMIEN_OUTPUT_START---';
+const OUTPUT_END_MARKER = '---DAMIEN_OUTPUT_END---';
 
 function writeOutput(output: ContainerOutput): void {
   console.log(OUTPUT_START_MARKER);
@@ -228,7 +228,7 @@ async function main(): Promise<void> {
   // Add context for scheduled tasks
   let prompt = input.prompt;
   if (input.isScheduledTask) {
-    prompt = `[SCHEDULED TASK - You are running automatically, not in response to a user message. Use mcp__nanoclaw__send_message if needed to communicate with the user.]\n\n${input.prompt}`;
+    prompt = `[SCHEDULED TASK - You are running automatically, not in response to a user message. Use mcp__damien__send_message if needed to communicate with the user.]\n\n${input.prompt}`;
   }
 
   try {
@@ -243,13 +243,13 @@ async function main(): Promise<void> {
           'Bash',
           'Read', 'Write', 'Edit', 'Glob', 'Grep',
           'WebSearch', 'WebFetch',
-          'mcp__nanoclaw__*'
+          'mcp__damien__*'
         ],
         permissionMode: 'bypassPermissions',
         allowDangerouslySkipPermissions: true,
         settingSources: ['project'],
         mcpServers: {
-          nanoclaw: ipcMcp
+          damien: ipcMcp
         },
         hooks: {
           PreCompact: [{ hooks: [createPreCompactHook()] }]

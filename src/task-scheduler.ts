@@ -3,13 +3,11 @@ import fs from 'fs';
 import path from 'path';
 
 import {
-  DATA_DIR,
   GROUPS_DIR,
-  MAIN_GROUP_FOLDER,
   SCHEDULER_POLL_INTERVAL,
   TIMEZONE,
 } from './config.js';
-import { runContainerAgent, writeTasksSnapshot } from './container-runner.js';
+import { kimi } from './ai/kimi-client.js';
 import {
   getAllTasks,
   getDueTasks,
@@ -60,46 +58,13 @@ async function runTask(
     return;
   }
 
-  // Update tasks snapshot for container to read (filtered by group)
-  const isMain = task.group_folder === MAIN_GROUP_FOLDER;
-  const tasks = getAllTasks();
-  writeTasksSnapshot(
-    task.group_folder,
-    isMain,
-    tasks.map((t) => ({
-      id: t.id,
-      groupFolder: t.group_folder,
-      prompt: t.prompt,
-      schedule_type: t.schedule_type,
-      schedule_value: t.schedule_value,
-      status: t.status,
-      next_run: t.next_run,
-    })),
-  );
-
   let result: string | null = null;
   let error: string | null = null;
 
-  // For group context mode, use the group's current session
-  const sessions = deps.getSessions();
-  const sessionId =
-    task.context_mode === 'group' ? sessions[task.group_folder] : undefined;
-
   try {
-    const output = await runContainerAgent(group, {
-      prompt: task.prompt,
-      sessionId,
-      groupFolder: task.group_folder,
-      chatJid: task.chat_jid,
-      isMain,
-      isScheduledTask: true,
-    });
-
-    if (output.status === 'error') {
-      error = output.error || 'Unknown error';
-    } else {
-      result = output.result;
-    }
+    // Use Kimi API directly instead of containers
+    const systemPrompt = `You are Damien, running scheduled task "${task.id}" for group "${group.name}". Be helpful and concise.`;
+    result = await kimi.complete(task.prompt, systemPrompt);
 
     logger.info(
       { taskId: task.id, durationMs: Date.now() - startTime },

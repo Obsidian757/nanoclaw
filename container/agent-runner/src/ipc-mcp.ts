@@ -1,5 +1,5 @@
 /**
- * IPC-based MCP Server for NanoClaw
+ * IPC-based MCP Server for Damien
  * Writes messages and tasks to files for the host process to pick up
  */
 
@@ -37,7 +37,7 @@ export function createIpcMcp(ctx: IpcMcpContext) {
   const { chatJid, groupFolder, isMain } = ctx;
 
   return createSdkMcpServer({
-    name: 'nanoclaw',
+    name: 'damien',
     version: '1.0.0',
     tools: [
       tool(

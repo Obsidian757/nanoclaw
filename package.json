@@ -1,5 +1,5 @@
 {
-  "name": "nanoclaw",
+  "name": "damien",
   "version": "1.0.0",
   "description": "Personal Claude assistant. Lightweight, secure, customizable.",
   "type": "module",
@@ -17,6 +17,7 @@
     "@whiskeysockets/baileys": "^7.0.0-rc.9",
     "better-sqlite3": "^11.8.1",
     "cron-parser": "^5.5.0",
+    "node-telegram-bot-api": "^0.66.0",
     "pino": "^9.6.0",
     "pino-pretty": "^13.0.0",
     "qrcode-terminal": "^0.12.0",
@@ -25,6 +26,7 @@
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.12",
     "@types/node": "^22.10.0",
+    "@types/node-telegram-bot-api": "^0.64.13",
     "@types/qrcode-terminal": "^0.12.2",
     "prettier": "^3.8.1",
     "tsx": "^4.19.0",
